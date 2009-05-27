@@ -29,9 +29,11 @@ It installed quickly and cleanly.
 
 It worked.
 
-So of course I had to [hack on
-it](http://github.com/richardc/perl-bryar-datasource-flatfile-dated-markdown/tree/master
-) (probably on CPAN in due course)
+So of course I had to [hack on it][plugin-github] (probably on CPAN in
+due course)
+
+[plugin-github]: http://github.com/richardc/perl-bryar-datasource-flatfile-dated-markdown/tree/master
+ 
 
 Bugger.
 
