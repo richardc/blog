@@ -1,73 +1,71 @@
+[% USE date %]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-[% MACRO day(entry_time) BLOCK;
-    entry_time.day _ ", " _ entry_time.mday _ " " _
-    entry_time.month _ " " _ entry_time.year;
-END;
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>[% bryar.config.name %]</title>
+        <link rel="alternate" type="application/rss+xml" title="rss" href="[%
+            bryar.config.baseurl %]?format=rss" />
+        <link rel="alternate" type="application/atom+xml" title="atom"
+            href="[% bryar.config.baseurl %]?format=atom" />
+        <link rel="stylesheet" type="text/css" href="/lightword/style.css" />
+        <script src="/lightword/js/cufon.js" type="text/javascript"></script>
+        <script src="/lightword/js/mp.font.js" type="text/javascript"></script>
+        
+    </head>
 
-MACRO permalink(entry, params) BLOCK;
- bryar.config.baseurl;
- '/id_';
- entry.id;
- "?" _ params IF params;
-END;
+    <body>
+        <div id="body">
+            <div id="header">
+                <div id="top">
+                    <h1 id="logo"><a name="top" title="[% bryar.config.name %]" href="[% bryar.config.baseurl %]">[% bryar.config.name %]</a> <small>[% bryar.config.description %]</h1>
+                </div>
+                <div id="rss-feed"><a title="Syndicate this site using RSS" href="[% bryar.config.baseurl %]?format=rss">Subscribe via RSS</a></div>
+                <div class="clear"></div>
+                
+                <ul id="front_menu">
+                [%# beats me <?php wp_list_pages_new(); ?> %]
+                </ul>
+                
+                <div id="header-search"> 
+                <form method="get" id="searchform"> 
+                <input type="text" value="" name="search" id="s" /> 
+                <input type="image" src="/lightword/images/search.gif" id="go" alt="Search" title="Search" /> 
+                </form>
+                </div>
+                <div class="clear"></div>
+            </div>
 
-%]
-
-<html>
-  <head>
-    <title>[% bryar.config.name %]</title>
-    <link rel="alternate" type="application/rss+xml" title="rss" href="[%
-				bryar.config.url %]?format=rss" />
-    <link rel="alternate" type="application/atom+xml" title="atom"
-						href="[% bryar.config.url %]?format=atom" />
-  </head>
-
-  <body>
-	  <div id="bryarHeader"><h1>[% bryar.config.name %]</h1></div>
-
-[% FOREACH entry = documents;
-    entry_time = entry.timepiece;
-    IF entry == documents.first or entry_time.ymd != previous.timepiece.ymd %]
-    <div class="bryarDate"> [% day(entry_time) %] </div>
-    [% END %]
+            <div id="content">
+                <div id="content-body">
+        
+[% FOREACH entry = documents %]
     [% previous = entry %]
-
-    <div class="bryarEntry">
-        <a name="[%entry.id%]"></a>
-            <h2 class="bryarTitle">[%entry.title%]</h2>
+                    <div class="post" id="[% entry.id %]">
+                        <h2><a title="[% entry.title %]" href="[% bryar.config.baseurl _ '/id_' _ entry.id %]" rel="bookmark">[% entry.title %]</a></h2>
+                        <div class="comm_date"><span class="data"><span class="j">[% date.format(entry.epoch, "%d") %]</span><br/>[% date.format( entry.epoch, "%b" )%]</span></div>
 
             [% entry.content %]
 
-            <br />
+                        <div class="cat_tags">
+                            <div class="category">[% IF entry.keywords %]Keywords: [% entry.keywords.join(', ') %][% ELSE %]Filed under: [% entry.category %][% END %]</div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="cat_tags_close"></div>
+                    </div>
+[% END %]
+                </div>
 
-    <div class="bryarEntrySource">Posted at 
-        <span class="bryarEntryTime">[%entry_time.time%]</span> 
-        by <span class="bryarEntryAuthor">[% bryar.config.author %]</span>
-    </div> 
-    
-    <ul class="bryarEntryLinks">     
-        <li><a href="[% permalink(entry, "") %]" title="Permanent link to '[% entry.title %]'">#</a></li>
-     </ul>
+            <div class="clear"></div>
+        </div>
+        <div id="footer">
+            <span class="text">Copyright &copy; [% date.format(date.now, "%Y") %] <a href="[% bryar.config.baseurl %]">[% bryar.config.name %]</a> &middot; Powered by <a href="http://search.cpan.org/dist/Bryar" title="Bryar">Bryar</a>.  Theme adapted from <a href="http://wordpress.org/extend/themes/lightword">Wordpress Lightword Theme</a> by <a href="http://students.info.uaic.ro/~andrei.luca/blog/" title="Andrei Luca">Andrei Luca</a>.</span>
+            <a class="top" href="#top"></a>
+        </div>
 
     </div>
-[% END %]
-
-<hr />
-
-<em>Powered by Bryar!</em>
-
-<form>Search &quot;[% bryar.config.name %]&quot;: <br />
-   <input name="search" type="text" class="bryarSingleLineBox">
-   <input name="submit" type="submit" value="Search" class="bryarButton" />
-</form>
-<hr />
-Subscribe to full text feeds via:
-<a href="?format=atom" content-type="application/atom+xml">Atom</a>
- |
-<a href="?format=rss2" content-type="application/rdf+xml">RSS2</a>
- |
-<a href="?format=rss" content-type="application/rdf+xml">RSS</a>
-
-
-</body>
+    [%# not sure on these either <?php cufon(footer); ?>  
+    <?php wp_footer(); ?> %]
+    </body>
 </html>
