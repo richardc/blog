@@ -18,8 +18,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 /* BASIC */
 *:focus{outline:none;}
 .clear{clear:both;}
-body{background-color:#2C2C29;font-family:Tahoma;font-size:11px;}
-p{font-size:1.2em;padding:2px;}
+body{background-color:#2C2C29;font-family:Tahoma;font-size:13px;}
+p{font-size:1.2em;padding:6px;}
 a{color:#9D9793;}
 h2{background-color:#FFF;border-bottom:1px solid #DCDCDB;letter-spacing:-1px;font-size:24px;padding-bottom:3px;font-weight:400;margin:10px 0 3px 0;font-family:Georgia;}
 h2 a{border:0;text-decoration:none;color:#2C2C29;display:block;}
@@ -30,7 +30,7 @@ pre{width:540px; white-space:pre-wrap;}
 /* LAYOUT */
 #body{width:811px;text-align:left;margin:0 auto;background-color:#FFF;color:#2C2C29;}
 #top{margin-left:5px;height:56px;}
-h1#logo,h1#logo a{padding-top:3px;font-size:36px;color:#FFF;text-decoration:none;text-transform:uppercase;}
+h1#logo,h1#logo a{padding-top:3px;font-size:36px;color:#FFF;text-decoration:none;}
 h1#logo small{color:#FFF;font-size:12px;display:block;margin:-5px 2px;}
 *:first-child+html h1#logo small{margin-top:-7px;}
 * html h1#logo small{margin-top:-7px;}
