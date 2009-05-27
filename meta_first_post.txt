@@ -29,7 +29,9 @@ It installed quickly and cleanly.
 
 It worked.
 
-So of course I had to [hack on it](http://search.cpan.org/dist/Bryar-DataSource-FlatFile-Dated-Markdown/).
+So of course I had to [hack on
+it](http://github.com/richardc/perl-bryar-datasource-flatfile-dated-markdown/tree/master
+) (probably on CPAN in due course)
 
 Bugger.
 
