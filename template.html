@@ -4,34 +4,6 @@
     entry_time.month _ " " _ entry_time.year;
 END;
 
-MACRO category(entry) BLOCK;
- "Category : " _ entry.category;
-END;
-
-MACRO author(entry) BLOCK;
- "Author : " _ entry.author;
-END;
-
-MACRO comment_form(entry) BLOCK;
-  'Post a new comment!
-  <DIV class="comment">
-  <FORM METHOD="POST">
-  Your name: <INPUT NAME="author"><BR>
-  Your address/home page: <INPUT NAME="url"><BR>
-  <HR WIDTH="98%">
-  Your rant:<BR>
-  <textarea NAME="content" COLS=80 ROWS=7></textarea>
-  <BR>
-  <INPUT TYPE="submit" VALUE="Vent">
-  <INPUT TYPE="hidden" NAME="id" VALUE="'; entry.id;
-  '"><INPUT TYPE="hidden" NAME="newcomment" VALUE="1">
-  
-  </FORM>
-  </DIV>
-  ';
-
-END;
-
 MACRO permalink(entry, params) BLOCK;
  bryar.config.baseurl;
  '/id_';
@@ -39,52 +11,6 @@ MACRO permalink(entry, params) BLOCK;
  "?" _ params IF params;
 END;
 
-MACRO comments(entry) BLOCK;
- '<a href="';
-  permalink(entry, "comments=1");
- '" title="Leave or view comments on \'entry.title\'">';
- entry.comments.size || 0;
- " Comments</a>";
- IF bryar.arguments.comments;
-     "</P>";
-
-     FOREACH comment = entry.comments; 
-     '<DIV CLASS="comment">';
-     comment.content;
-     '<BR><HR COLOR="#AAAAAA" WIDTH=98%>';
-     '<I>Posted by <A HREF="'; comment.url; '">'; comment.author;
-     '</A> at ';
-     day(comment.timepiece);
-     ' '; 
-     comment.timepiece.time;
-     '</I></DIV>';
-     '<BR>';
-     END;
-     comment_form(entry);
-     "<P>";
- END;
-END; 
-
-%]
-
-[%
-
-MACRO google_link(query, label) BLOCK;
- '<a href="http://www.google.com/search?q=';
- query | html | uri;
- '" title="Search Google for more stuff link this...">'; 
- label; 
- "</a>";
-END;
-
-MACRO keywords(entry) BLOCK;
-    "Keywords :";
-    FOREACH key = entry.keywords.slice(0,2);
-       '[ ';
-       google_link(key, key);
-       '] ';
-    END;
-END;
 %]
 
 <html>
