@@ -87,7 +87,17 @@ MACRO keywords(entry) BLOCK;
 END;
 %]
 
-[% INCLUDE head.html %]
+<html>
+  <head>
+    <title>[% bryar.config.name %]</title>
+    <link rel="alternate" type="application/rss+xml" title="rss" href="[%
+				bryar.config.url %]?format=rss" />
+    <link rel="alternate" type="application/atom+xml" title="atom"
+						href="[% bryar.config.url %]?format=atom" />
+  </head>
+
+  <body>
+	  <div id="bryarHeader"><h1>[% bryar.config.name %]</h1></div>
 
 [% FOREACH entry = documents;
     entry_time = entry.timepiece;
@@ -111,12 +121,27 @@ END;
     
     <ul class="bryarEntryLinks">     
         <li><a href="[% permalink(entry, "") %]" title="Permanent link to '[% entry.title %]'">#</a></li>
-        <li><a href="http://www.technorati.com/cosmos/search.html?rank=&url=[% permalink(entry, "") %]"><img src="/notebook/images/technorati_bubble.gif" width="19px" height="18px" border="0" align="middle" title="Search Technorati Cosmos..." /></a></li>
-        <li>[% google_link(entry.title, "G") %]</li>
-        <li>[% comments(entry) %]</li>
      </ul>
 
     </div>
 [% END %]
 
-[% INCLUDE foot.html %]
+<hr />
+
+<em>Powered by Bryar!</em>
+
+<form>Search &quot;[% bryar.config.name %]&quot;: <br />
+   <input name="search" type="text" class="bryarSingleLineBox">
+   <input name="submit" type="submit" value="Search" class="bryarButton" />
+</form>
+<hr />
+Subscribe to full text feeds via:
+<a href="?format=atom" content-type="application/atom+xml">Atom</a>
+ |
+<a href="?format=rss2" content-type="application/rdf+xml">RSS2</a>
+ |
+<a href="?format=rss" content-type="application/rdf+xml">RSS</a>
+
+
+</body>
+</html>
