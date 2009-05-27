@@ -1,0 +1,122 @@
+
+[% MACRO day(entry_time) BLOCK;
+    entry_time.day _ ", " _ entry_time.mday _ " " _
+    entry_time.month _ " " _ entry_time.year;
+END;
+
+MACRO category(entry) BLOCK;
+ "Category : " _ entry.category;
+END;
+
+MACRO author(entry) BLOCK;
+ "Author : " _ entry.author;
+END;
+
+MACRO comment_form(entry) BLOCK;
+  'Post a new comment!
+  <DIV class="comment">
+  <FORM METHOD="POST">
+  Your name: <INPUT NAME="author"><BR>
+  Your address/home page: <INPUT NAME="url"><BR>
+  <HR WIDTH="98%">
+  Your rant:<BR>
+  <textarea NAME="content" COLS=80 ROWS=7></textarea>
+  <BR>
+  <INPUT TYPE="submit" VALUE="Vent">
+  <INPUT TYPE="hidden" NAME="id" VALUE="'; entry.id;
+  '"><INPUT TYPE="hidden" NAME="newcomment" VALUE="1">
+  
+  </FORM>
+  </DIV>
+  ';
+
+END;
+
+MACRO permalink(entry, params) BLOCK;
+ bryar.config.baseurl;
+ '/id_';
+ entry.id;
+ "?" _ params IF params;
+END;
+
+MACRO comments(entry) BLOCK;
+ '<a href="';
+  permalink(entry, "comments=1");
+ '" title="Leave or view comments on \'entry.title\'">';
+ entry.comments.size || 0;
+ " Comments</a>";
+ IF bryar.arguments.comments;
+     "</P>";
+
+     FOREACH comment = entry.comments; 
+     '<DIV CLASS="comment">';
+     comment.content;
+     '<BR><HR COLOR="#AAAAAA" WIDTH=98%>';
+     '<I>Posted by <A HREF="'; comment.url; '">'; comment.author;
+     '</A> at ';
+     day(comment.timepiece);
+     ' '; 
+     comment.timepiece.time;
+     '</I></DIV>';
+     '<BR>';
+     END;
+     comment_form(entry);
+     "<P>";
+ END;
+END; 
+
+%]
+
+[%
+
+MACRO google_link(query, label) BLOCK;
+ '<a href="http://www.google.com/search?q=';
+ query | html | uri;
+ '" title="Search Google for more stuff link this...">'; 
+ label; 
+ "</a>";
+END;
+
+MACRO keywords(entry) BLOCK;
+    "Keywords :";
+    FOREACH key = entry.keywords.slice(0,2);
+       '[ ';
+       google_link(key, key);
+       '] ';
+    END;
+END;
+%]
+
+[% INCLUDE head.html %]
+
+[% FOREACH entry = documents;
+    entry_time = entry.timepiece;
+    IF entry == documents.first or entry_time.ymd != previous.timepiece.ymd %]
+    <div class="bryarDate"> [% day(entry_time) %] </div>
+    [% END %]
+    [% previous = entry %]
+
+    <div class="bryarEntry">
+        <a name="[%entry.id%]"></a>
+            <h2 class="bryarTitle">[%entry.title%]</h2>
+
+            [% entry.content %]
+
+            <br />
+
+    <div class="bryarEntrySource">Posted at 
+        <span class="bryarEntryTime">[%entry_time.time%]</span> 
+        by <span class="bryarEntryAuthor">[% bryar.config.author %]</span>
+    </div> 
+    
+    <ul class="bryarEntryLinks">     
+        <li><a href="[% permalink(entry, "") %]" title="Permanent link to '[% entry.title %]'">#</a></li>
+        <li><a href="http://www.technorati.com/cosmos/search.html?rank=&url=[% permalink(entry, "") %]"><img src="/notebook/images/technorati_bubble.gif" width="19px" height="18px" border="0" align="middle" title="Search Technorati Cosmos..." /></a></li>
+        <li>[% google_link(entry.title, "G") %]</li>
+        <li>[% comments(entry) %]</li>
+     </ul>
+
+    </div>
+[% END %]
+
+[% INCLUDE foot.html %]

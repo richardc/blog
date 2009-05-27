@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed version="0.3" xmlns="http://purl.org/atom/ns#">
+  <title>[% bryar.config.name %]</title>
+  <link rel="alternate" type="text/html"
+   href="[% bryar.config.baseurl %]"/>
+  <modified>[%documents.first.timepiece.datetime%][% FILTER format("%03d") %][% documents.first.timepiece.tzoffset / 3600 %][%END%]:00</modified>
+  <author>
+    <name>[% bryar.config.author %]</name>
+  </author>
+[% FOREACH item = documents %]
+  <entry>
+    <title>[% item.title %]</title>
+    <link rel="alternate" type="text/html"
+     href="[%bryar.config.baseurl _ "/id_" _ item.id %]"/>
+    [% idURL = bryar.config.baseurl | replace('http://', '') | replace('/.*', '') %]
+    <id>tag:[% idURL _ "," _ item.timepiece.year _":id_" _ item.id %]</id>
+    [% hours = item.timepiece.tzoffset / 3600 %]
+    [% minutes = (item.timepiece.tzoffset % (hours * 60 * 60)) / 60 %]
+    <issued>[% item.timepiece.datetime %][% FILTER format("%03d") %][% hours  %][%END%]:[% FILTER format("%02d") %][% minutes %][%END%]</issued>
+    <modified>[% item.timepiece.datetime %][% FILTER format("%03d") %][% hours  %][%END%]:[% FILTER format("%02d") %][% minutes %][%END%]</modified>
+    <summary type="text/plain"> [% FILTER truncate(252) %]
+            [%  item.excerpt(bryar.config.excerpt_words) %]
+        [% END %]
+    </summary>
+    <content type="text/html" mode="escaped" xml:lang="en" xml:base="[% bryar.config.baseurl %]">
+      <![CDATA[ [% item.content %] ]]>
+    </content>
+  </entry>
+[% END %]
+</feed>
