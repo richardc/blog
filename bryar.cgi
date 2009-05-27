@@ -1,2 +1,2 @@
-#!/usr/bin/perl
+#!/usr/local/bin/perl
 use Bryar; Bryar->go()

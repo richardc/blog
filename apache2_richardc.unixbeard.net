@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+	ServerAdmin webmaster@unixbeard.net
+	ServerName richardc.unixbeard.net
+
+	DocumentRoot /home/richardc/hck/blog
+	<Directory /home/richardc/hck/blog>
+		Options Indexes FollowSymLinks ExecCGI
+		AllowOverride None
+		Order allow,deny
+		allow from all
+                DirectoryIndex bryar.cgi
+                AddHandler cgi-script cgi
+	</Directory>
+
+	ErrorLog /var/log/apache2/richardc.unixbeard.net_error.log
+	CustomLog /var/log/apache2/richardc.unixbeard.net_access.log combined
+</VirtualHost>
