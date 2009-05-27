@@ -1,5 +1,0 @@
-My first Bryar blog post!
-
-<p>First post! First post!</p>
-<p>Wow, this Bryar thing is neat, huh?  This space should fill up with helpful 
-hints on what else you can do with Bryar.</p>
