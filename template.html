@@ -1,4 +1,5 @@
 [% USE date %]
+[% PROCESS variables.tt %]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -25,9 +26,11 @@
                 <div class="clear"></div>
                 
                 <ul id="front_menu">
-                [%# beats me <?php wp_list_pages_new(); ?> %]
+[% FOR link = top_nav_links %]
+                    <li class="page_item page-item-2"><a href="[% link.url %]" title="[% link.title %]"><span>[% link.title %]</span></a></li>
+[% END %]
                 </ul>
-                
+
                 <div id="header-search"> 
                 <form method="get" id="searchform"> 
                 <input type="text" value="" name="search" id="s" /> 
