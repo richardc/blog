@@ -1,5 +1,11 @@
 [%
-top_nav_links = [
-#   { title => "Home",  url => "/" },
+sample_top_nav_links = [
+   { title => "Home",  url => "/" },
+]
+
+sample_sidebar_boxes = [
+    { title => "Pages", links => [
+        { title => "Home",  url => "/" },
+    ] },
 ]
 %]
