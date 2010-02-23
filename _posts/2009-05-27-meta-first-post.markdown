@@ -1,5 +1,8 @@
-2009-05-27 19:27:32
-Obligatory meta first post
+---
+layout: post
+bargo: 2009-05-27 19:27:32
+title: Obligatory meta first post
+---
 
 Not that it should matter, but this blog is running under
 [Bryar](http://search.cpan.org/dist/Bryar/).  There is, as you can see, a

@@ -2,14 +2,12 @@
 	ServerAdmin webmaster@unixbeard.net
 	ServerName richardc.unixbeard.net
 
-	DocumentRoot /home/richardc/hck/blog
-	<Directory /home/richardc/hck/blog>
+	DocumentRoot /home/richardc/hck/blog/_site
+	<Directory /home/richardc/hck/blog/_site>
 		Options Indexes FollowSymLinks ExecCGI
 		AllowOverride None
 		Order allow,deny
 		allow from all
-                DirectoryIndex bryar.cgi
-                AddHandler cgi-script cgi
 	</Directory>
 
 	ErrorLog /var/log/apache2/richardc.unixbeard.net_error.log

@@ -1,0 +1,8 @@
+destination: ./_site
+auto:        true
+server_port: 4000
+pygments:    true
+markdown:    rdiscount
+permalink:   /:year/:month/:title
+title: richardc - hardly moving
+url:  http://richardc.unixbeard.net
