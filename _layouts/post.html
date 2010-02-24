@@ -1,5 +1,6 @@
 ---
 layout: default
+comments: true
 ---
 
 <div class="content">
@@ -7,4 +8,11 @@ layout: default
   {% include post_header.html %}
   {{ content }}
   </div>
+
+{% if page.comments %}
+<script type="text/javascript">var disqus_developer = location.host.match(/\.dev$|^localhost/) ? 1 : 0;</script>
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/richardc/embed.js"></script><noscript><a href="http://disqus.com/forums/richardc/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+{% endif %}
+
 </div>

@@ -8,6 +8,9 @@ title: richardc - not all that pretty
     <div id="post">
     {% include post_header.html %}
     {{ page.content }}
+    <div class="entry-meta"> 
+      Written by <a href="/">Richard Clamp</a> | <a class="comment_count quiet" href="{{ page.url }}#disqus_thread">Comments</a>
+    </div>
     </div>
 {% endfor %}
 </div>
