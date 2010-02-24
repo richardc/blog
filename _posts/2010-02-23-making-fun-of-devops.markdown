@@ -43,4 +43,5 @@ Feature: Writing haikus
 
 {% endhighlight %}
 
-And in doing so I think I've accidentally sold myself on playing with cucumber-nagios.  Whoops.
+And in doing so I think I've accidentally sold myself on playing with
+[cucumber-nagios](http://auxesis.github.com/cucumber-nagios/). Whoops.
