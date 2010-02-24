@@ -1,0 +1,136 @@
+Bear notes:
+
+Two imp mangle specs:
+5 mans/raids: 0/61/
+raids with prot warrior for thunderclap: 0/58/* threat build
+
+Glyphs;
+Maul, Survival Instincts, Frenzied Regeneration, Challenging Roar
+
+For single target fights with important taunt switches swap out the Maul 
+glyph for a Growl one.  On Deathbringer Saurfang you want to drop it so you
+don't start tanking the Blood Beasts.
+
+
+Rotation (w/improved mangle);
+
+The tankspot video covers both the improved and non-improved mangle rotations
+in some depth, but the distilled version of the imp mangle rotation is:
+
+Mangle, GCD, GCD
+
+Prioritity list for the 2nd and 3rd global cooldown is - 
+Maintain lacerate stack
+Reapply Demo Roar if it falls off
+Faerie Fire if it's off cooldown
+Swipe
+
+Note that Faerie Fire invokes a 1-second global rather that the usual
+1.5 seconds.  That means when you use FF in the rotation you'll need to
+include a half second delay for maximum TPS ie:
+
+Mangle, FF, Swipe, 0.5s wait, Mangle is more TPS than 
+Mangle, FF, Swipe, Swipe, Mangle despite the dead half a second.
+
+
+Boss/single target opening;
+
+Faerie Fire, Demo Roar
+Mangle, Lacerate, Lacerate
+Mangle, Lacerate, Lacerate
+Mangle, Lacerate, Beserk
+
+While Beserk is up: Mangle spam, keep Lacerate up
+
+
+AOE tanking;
+
+Faerie Fire, Demo Roar
+Mangle, Swipe, Swipe
+Mangle, Swipe, Swipe
+Mangle, Swipe, Swipe
+
+
+Macros;
+I macro /startattack onto many of my buttons, so even if I'm out of rage I'm
+going to start building it via white damage.  I also tend to and keep Maul
+queued ensuring that I don't get rage starved (very unlikely after the first
+two seconds) as it'll put threat up on two targets with the Maul glyph.
+
+ff
+/cast Faerie Fire(Feral)
+/startattack
+/stopmacro [modifier]
+/cast !Maul
+
+sm
+/cast Swipe(Bear)
+/cast Barkskin
+/startattack
+/stopmacro [modifier]
+/cast !Maul
+
+mm
+/cast Mangle(Bear)
+/startattack
+/stopmacro [modifier]
+/cast !Maul
+
+la
+/cast Lacerate
+/startattack
+
+
+A note on Demoralising Roar;
+If you have a warrior with you, let them Demoralising Shout, their attack
+power reduction should be greater.
+If you have a retribution or protection paladin in the group they may be 
+specced into Vindication which will overwrite your Demo Roar debuff as it's
+a greater attack power reduction.  At this point make sure you're still
+debuffing the adds, but you can stop trying to reapply it to your target.
+
+
+Gearing;
+No need for defense rating with 3/3 Survival of the fittest.
+Defense rating does give a bit of dodge, but the other components
+(block and parry rating) are wasted on you.
+Raw dodge rating is pretty good, agility is better.
+
+Until you break 40% dodge, agility is more valuable than stamina.
+At 40% dodge stamina edges out agility for effective health,
+and you can start to evaluate the strength and stamina items (rings, necks, 
+cloaks) as they grant more stamina than the equivalent level rogue/hunter
+pieces.  The strength on these items will also give you a bit more attack
+power for added threat and mitigation via savage defenses, but you'll still
+get most of your attack power from your weapon, so don't go overboard on
+strength.
+
+Gemming:
+Meta-gem: +stamina and 3% armor value from gear.
+
+If it's a single red, and you get more agility or stamina, stick a +20
+agility in.  If not jam +30 stamina into it.
+
+Bare in mind it might not be worth you matching bonuses even when the
+socket bonus is extra stamina if it's not a red or blue socket.  For example
+the 50 EoF cloak has a yellow socket with a bonus of +8 stamina.  As there
+aren't any decent yellow gems for bears by matching the socket you lose 22
+stamina by not socketing a +30 stamina gem.
+
+Enchants:
+Head:     AC revered (+35 stamina, some defense)
+Shoulders: 10,000 Honor Stamina, or Sons of Hodir AP/Crit
+Chest:    +10 stats
+Legs:      LW patch (better if LW)
+Boots:    +22 stamina
+Bracers:  +18 stamina (+102 if LW)
+Hands     +18 stamina
+Back:     +22 agility (more with engineering)
+Weapon:   Mongoose
+
+Relic;
+Relic-wise the EoC is better than the EoV one, as the agi will give
+armor, crit, and alost as much dodge as the pure dodge on the EoV.
+The EoF one, fully stacked, is better, but only just.  It's recommended
+that you get yourself the cloak and 4pc T10 before you spend the EoF on it.
+
