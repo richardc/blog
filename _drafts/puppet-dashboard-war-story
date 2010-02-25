@@ -1,0 +1,17 @@
+
+Spent 2 hours trying to figure out why my puppet-dashboard database
+snapshot from prod was causing my dev copy to explode, when I discoverd
+what it actually does is just keep the raw report as YAML in a TEXT record.
+
+TEXT is limited to 64k
+
+So the report can/will be truncated silently to 64k.
+
+And because it's YAML which is meant to be easier to write because it
+doesn't have matching braces or anything, it's much hard to even detect the 
+truncation error
+
+  SELECT count(*) FROM reports where length(report)=65535
+  5
+
+5 too many
