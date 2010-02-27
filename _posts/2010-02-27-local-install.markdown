@@ -5,21 +5,20 @@ title: Local install roundup
 
 There are going to be times when you need to stray outside your packaging
 system to get a version of a module. It might be that the version your vendor
-ships is too old, or that the module you're interested in is very new and so
-hasn't been packaged for your distribution yet. One solution to this is to set
-up a local library path tucked away in your home directory for use with the
-vendor-supplied interpreter.
+ships is too old, or that it's not packaged. One way around is to set up a
+local library path tucked away in your home directory, and install modules
+there.
 
-While there's a bigger topic on the ways that this could mess you up, here's a
-cleaned up page out of my notebook on how to set these things up for various
+While there's a bigger topic on the ways that this can mess you up, here's a
+cleaned up page out of my notebook on how to set this up for various
 languages.
 
 
 ## Python
 
-[virtualenv](http://pypi.python.org/pypi/virtualenv) creates what feels
-a little like a chroot, which you can install your libraries into.  Getting
-it going is very simple:
+[virtualenv](http://pypi.python.org/pypi/virtualenv) creates what feels a
+little like a chroot which you can install your libraries into. Getting it
+going is very simple:
 
 {% highlight console %}
 $ virtualenv .virtualenv
