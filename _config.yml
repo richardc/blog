@@ -5,3 +5,4 @@ markdown:    rdiscount
 permalink:   /:year/:month/:title
 title: richardc - hardly moving
 url:  http://richardc.unixbeard.net
+author: Richard Clamp
