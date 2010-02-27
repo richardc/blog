@@ -9,6 +9,13 @@
 		Order allow,deny
 		allow from all
 	</Directory>
+	RewriteEngine On
+
+	# compatibility for old Bryar rss/atom feed urls
+	RewriteCond %{QUERY_STRING} ^format=rss$ 
+	RewriteRule ^. /rss.xml?  [R=301,L] 
+	RewriteCond %{QUERY_STRING} ^format=atom$ 
+	RewriteRule ^. /atom.xml?  [R=301,L] 
 
 	ErrorLog /var/log/apache2/richardc.unixbeard.net_error.log
 	CustomLog /var/log/apache2/richardc.unixbeard.net_access.log combined
