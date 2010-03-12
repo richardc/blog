@@ -1,0 +1,56 @@
+
+http://www.zabbix.com/documentation/1.8/manual/tutorials/extending_agent
+
+First work out your one-liner(s) to add, and then add it as so:
+
+{{{
+
+# /etc/zabbix/zabbix_agent.d/memcached.conf
+
+UserParameter=memcached.cmd_get,echo stats | nc localhost 11211 | awk '/cmd_get/ { print $3 }'
+UserParameter=memcached.cmd_set,echo stats | nc localhost 11211 | awk '/cmd_set/ { print $3 }'
+UserParameter=memcached.bytes_read,echo stats | nc localhost 11211 | awk '/bytes_read/ { print $3 }'
+UserParameter=memcached.bytes_written,echo stats | nc localhost 11211 | awk '/bytes_written/ { print $3 }'
+
+}}}
+
+
+Validate the syntax on the command line:
+
+{{{
+
+$ zabbix_agent -t memcached.cmd_get
+memcached.cmd_get                             [t|19317]
+
+}}}
+
+
+Bounce the agent
+
+{{{
+
+$ sudo /etc/init.d/zabbix-agent restart
+Shutting down ZABBIX agent:                                [  OK  ]
+Starting ZABBIX agent:                                     [  OK  ]
+
+}}}
+
+
+Check it's responsing with zabbix_get
+
+{{{
+
+$ zabbix_get -s127.0.0.1 -kmemcached.cmd_get
+19317
+
+}}}
+
+Add new item for monitoring.
+
+Navigate to Configuration of items.  http://emoore-dev.hosts.ipcdigital.co.uk/zabbix/items.php
+
+Add a new item where the key is one of the probes you declared.
+
+
+
+

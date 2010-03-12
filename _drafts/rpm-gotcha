@@ -1,0 +1,23 @@
+The package-maintainers commandments
+
+ Respect the host OS
+ Respect the FHS
+ Build in a clean environment (mach)
+ Use scripts sparingly
+
+
+From the hallowed pages of rpm(1)
+
+{% highlight %}
+
+The general form of an rpm upgrade command is
+
+rpm {-U|--upgrade} [install-options] PACKAGE_FILE ...
+
+This upgrades  or installs the package currently installed to a newer version.
+This is the same as install, except all other version(s) of the package are
+removed after the new package is installed.
+
+{% endhighlight %}
+
+
