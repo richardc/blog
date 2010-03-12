@@ -1,0 +1,24 @@
+Small thought, distributed version control.
+
+Version control has always been something I care about.
+
+RCS.  Single file.  Locking.  Emacs/wrapper scripts help.
+
+Cvs.  Work on a directory of files.  Centralised server model.  Changesets by convention.  Branch tools are horrible.  Tagging rewrites your entire repository.
+
+Used to be a set of wrappers around RCS.  Never really changed in the repository layer, so you've got some of the benefits
+
+Subversion. Same directory-oriented working copy.  Centralised model.  Changesets are your default mode of operation.  Renames not horribly painful.
+
+Gets a lot of knockers for just being CVS less some suck.  If it wasn't just CVS without suck people would simply not have adopted it.
+
+bdb database was horrid - locking.  fsfs!  Slowly getting good merge tracking, and probably too late.
+
+Distributed version control off in the background.  Bitkeeper is payware.  $thing doesn't scale, is hard to understand, and only works on linuxes.
+
+:: Speed in which things go from linux-only to all unixes to windows is vital
+
+Mercurial
+
+Git
+
