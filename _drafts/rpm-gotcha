@@ -1,14 +1,18 @@
-The package-maintainers commandments
-
- Respect the host OS
- Respect the FHS
- Build in a clean environment (mach)
- Use scripts sparingly
+---
+layout: post
+title: 'RPM Scriptlets: A Small Gotcha'
+---
 
 
-From the hallowed pages of rpm(1)
+rpm allows you to define multiple scriptlets (such a sickly name) that will be
+invoked at various phases of the package installation. %pre and %post happen
+before and after installing a package, %preun and %postun happen before and
+after removing it. It's quite a useful feature but there's a small gotcha
+(well it got me) which I'm going to share.
 
-{% highlight %}
+Here's the gun on the mantlepiece from rpm(1).
+
+{% highlight text %}
 
 The general form of an rpm upgrade command is
 
@@ -19,5 +23,61 @@ This is the same as install, except all other version(s) of the package are
 removed after the new package is installed.
 
 {% endhighlight %}
+
+
+And here's it going off, right in your face:
+
+{% highlight text %}
+Name: thetick
+Version: 1.1
+Revision: 1
+Source: http://madeup.com/src/%{name}-%{version}.tar.gz
+
+%preun
+# stop the service (if running) and unregister the init script
+service thetick stop || true
+chkconfig --delete thetick
+
+%post
+# register the service
+chkconfig --add thetick
+
+
+{% endhighlight %}
+
+An aside, that's close to all you need to write a .spec file for an rpm. It's
+a lot less painful to do manually than all the magic you need to make a debian
+package, based on my limited backporting experience.
+
+Consider an upgrade of thetick-1.1-1 to thetick-1.2-1, we've got lucky with a
+property of rpms that the only change we needed to make to the .spec file was
+to change the Version define and add something to the Changelog. So we upgrade
+
+{% highlight console %}
+$ rpm -U thetick-1.2-1.noarch.rpm
+Shutting down The Tick:                                [  OK  ]
+{% endhighlight %}
+
+OK, so we see that we stopped the service as expected in the %preun, as we
+specified, so we'd best boot it back up.
+
+{% highlight console %}
+$ service thetick start
+XXX real error message
+{% endhighlight %}
+
+So wait, what, we didn't do the %post scriptlet?
+
+Being a print debugger I went back and instrumented the .spec file to echo out whose scriplets were firing, and came back with something odd:
+
+{% highlight console %}
+$ rpm -U thetick-1.2-1.noarch.rpm
+XXX annotated version
+{% endhighlight %}
+
+During an upgrade, the order that the steps happen are as hinted at in the
+rpm(1) manual - install new version and remove old one.
+
+http://fedoraproject.org/wiki/Packaging/ScriptletSnippets
 
 
