@@ -1,0 +1,61 @@
+
+
+First work out your plugin to install/write.
+
+{{{
+#!/usr/bin/perl
+use strict;
+use warnings;
+use IO::Socket;
+
+my $memcached = "127.0.0.1:11211";
+
+my $sock = IO::Socket::INET->new( PeerAddr => $memcached );
+unless ($sock) {
+    print "Error: cannot connect to memcached on $memcached\n";
+    exit 2;
+}
+
+print {$sock} "stats\nquit\n";
+my %stats;
+while (<$sock>) {
+    m/STAT (\S+) (\S+)/ and $stats{$1} = $2;
+}
+
+my $data = join( ' ', map { "$_=$stats{$_}c" } qw( cmd_get cmd_set ) );
+
+print "OK: memcached $memcached running | $data\n";
+}}}
+
+Write it and install like so:
+
+{{{
+
+# /etc/nrpe/nrpe.d/memcached.conf
+
+command[check_memcached]=/usr/local/sbin/check_memcached
+
+}}}
+
+
+Bounce the agent
+
+{{{
+
+$ sudo /etc/init.d/nrpe restart
+Shutting down Nagios NRPE daemon (nrpe):                   [  OK  ]
+Starting Nagios NRPE daemon (nrpe):                        [  OK  ]
+
+}}}
+
+
+Check it's responsing with check_nrpe
+
+{{{
+
+$ /usr/lib64/nagios/plugins/check_nrpe -H localhost -c check_memcached
+OK: memcached 127.0.0.1:11211 running | cmd_get=19317c cmd_set=13048c
+
+}}}
+
+
