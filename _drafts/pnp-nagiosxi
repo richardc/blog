@@ -1,0 +1,54 @@
+NagiosXI uses PNP to do graphing. To enable custom graph templates these
+are the steps I took on the NagiosXI applicance.
+
+
+{{{
+
+# /usr/local/nagios/etc/pnp/check_commands/check_nrpe.cfg
+
+# http://docs.pnp4nagios.org/pnp-0.6/tpl_custom
+# use ARG1
+CUSTOM_TEMPLATE=1
+
+}}}
+
+We can verify that by looking at the xml that perfdata stores:
+
+/usr/local/nagios/share/perfdata/bfb-031.network.ipcdigital.co.uk/memcached.xml
+
+{{{
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<NAGIOS>
+  <DATASOURCE>
+      <TEMPLATE>check_memcached</TEMPLATE>
+
+}}}
+
+
+Then we're free to add a custom nrpe template to PNP
+
+{{{
+
+# /usr/local/nagios/share/pnp/templates/check_memcached.php
+
+<?php
+# Plugin: check_memcached
+#
+$opt[1] = "--vertical-label \"Traffic\" -b 1024 --title \"Interface Traffic for $hostname / $servicedesc\" ";
+$def[1] = "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
+$def[1] .= "DEF:var2=$rrdfile:$DS[2]:AVERAGE " ;
+$def[1] .= "LINE1:var1#003300:\"cmd_get\" " ;
+$def[1] .= "GPRINT:var1:LAST:\"%7.2lf %Sb/s last\" " ;
+$def[1] .= "GPRINT:var1:AVERAGE:\"%7.2lf %Sb/s avg\" " ;
+$def[1] .= "GPRINT:var1:MAX:\"%7.2lf %Sb/s max\\n\" " ;
+$def[1] .= "LINE1:var2#00ff00:\"cmd_set\" " ;
+$def[1] .= "GPRINT:var2:LAST:\"%7.2lf %Sb/s last\" " ;
+$def[1] .= "GPRINT:var2:AVERAGE:\"%7.2lf %Sb/s avg\" " ;
+$def[1] .= "GPRINT:var2:MAX:\"%7.2lf %Sb/s max\" "
+?>
+
+}}}
+
+
+
