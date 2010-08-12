@@ -1,3 +1,4 @@
 #!/bin/sh
+export PATH=$HOME/hck/vim-pygments:$HOME/hck/python-virtualenv/bin:$PATH
 open http://localhost:4000
-jekyll --auto --server
+~/.gem/ruby/1.8/bin/jekyll  --auto --server
