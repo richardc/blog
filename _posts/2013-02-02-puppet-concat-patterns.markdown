@@ -3,11 +3,17 @@ layout: post
 title: "Puppet concat patterns"
 ---
 
-It's a common pattern when managing systems with puppet to want to build up a
-configuration from multiple points in your classes.   When the service you're
-configuring natively supports a conf.d style this is quite straightforward, you
-just drop files from whereever makes sense, but for a single-file resource you
-need to use one of the concatenation patterns available to you with puppet.
+It's common to want to configure a shared resource from many classes in your
+module tree, each class defining it's own configuration parameters that then
+merge into a more unified whole.
+
+When the resource you're configuring natively supports a conf.d style
+this makes the configuration management job quite simple, you just drop
+out a new file from each class that's interested and call it done.
+
+The complexity comes when you have a single file that you need to
+manage.  At that point it's time to break out one of the concatenation
+options available to you with puppet.
 
 Probably the most widely-used concatenation pattern is to use
 R.I.Pienaar's excellent puppet-concat module.
