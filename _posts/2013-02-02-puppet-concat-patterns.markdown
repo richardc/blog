@@ -114,10 +114,10 @@ definition of hostgroups.
         nagios::host { "ntp server: }
     }
 
-This works but the major drawback is that you need to write a new assembly
-script each time you use it, and there's all those intermediate
-files in a build directory to manage.  In short it's complex and hard to
-follow.
+This works but the major drawback is that you need to write a new
+assembly script each time you use it.  Also there are the intermediate files
+and a build directory to worry about.  This can make it a little hard to follow
+which isn't a good look for your modules.
 
 Having implemented this stitching pattern more than enough times I started to
 think about the practicality of moving to a more data-oriented model, where the
