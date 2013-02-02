@@ -160,3 +160,6 @@ Hopefully the datacat types provide a general enough model to allow you
 to manage arbritary files you build up with data, and the interface
 should be clearer than dropping multiple fragment files.
 
+I have some rough edges to sand away and more testing to do, but datacat should
+be available from the forge in a few days.
+
