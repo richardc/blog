@@ -16,7 +16,8 @@ manage.  At that point it's time to break out one of the concatenation
 options available to you with puppet.
 
 Probably the most widely-used concatenation pattern is to use
-R.I.Pienaar's excellent puppet-concat module.
+R.I.Pienaar's excellent
+[puppet-concat](https://github.com/ripienaar/puppet-concat) module.
 
 If you're not familiar with it here's a worked example of adding lines
 to the /etc/motd file from multiple classes.
@@ -121,7 +122,8 @@ which isn't a good look for your modules.
 
 Having implemented this stitching pattern more than enough times I started to
 think about the practicality of moving to a more data-oriented model, where the
-reassembly step can be a straightforward template evaluation step.
+reassembly step can be a straightforward template evaluation step.  What shook
+out is a module called [datacat](https://github.com/richardc/puppet-datacat).
 
 Revisiting the nagios hostgroups pattern, with datacat it would look like this:
 
@@ -160,4 +162,4 @@ should be clearer than dropping multiple fragment files.
 
 I have some rough edges to sand away, which may include giving it a
 better name, and much more testing to do, but datacat should be
-available from the forge in a few days.
+available from the [forge](http://forge.puppetlabs.com/) in a few days.
