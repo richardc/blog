@@ -7,14 +7,15 @@ It's a common pattern when managing systems with puppet to want to build up a
 configuration from multiple points in your classes.   When the service you're
 configuring natively supports a conf.d style this is quite straightforward, you
 just drop files from whereever makes sense, but for a single-file resource you
-need to use one of the concatenation modules.
-
+need to use one of the concatenation patterns available to you with puppet.
 
 ## concat
 
-The original and probably most-widely used concatenation module is
-R.I.Pienaar's puppet-concat module, if you're not familiar with it
-here's a worked example of adding metadata to the /etc/motd file
+Probably the most widely-used concatenation pattern is to use
+R.I.Pienaar's excellent puppet-concat module.
+
+If you're not familiar with it here's a worked example of adding lines
+to the /etc/motd file from multiple classes.
 
     # motd/manifests/init.pp
     class motd {
@@ -47,10 +48,12 @@ complex.
 
 ## The stitching pattern
 
-The typical pattern I use for this is what I call stitching, you write files
-containing data fragments to a temporary location, then write a script which
-parses those fragments and emits your config file.  For an example here's a
-hypothetical nagios class:
+The typical pattern I use for this is what I call stitching.  You write files
+containing data fragments to a temporary location, then you have a script to
+parse those fragments and emit your config file.
+
+Here's a worked example of the pattern for a nagios class that manages
+the definition of hostgroups.
 
     # nagios/manifests/init.pp
     class nagios {
@@ -108,13 +111,13 @@ hypothetical nagios class:
         nagios::host { "ntp server: }
     }
 
+This works but the major drawback is you need to write a new assembly
+script each time you use it, also you end up with a bunch of intermediate
+files in a build directory to manage.
 
-This works but you need to write a new assembly script for each application,
-and you need to add data fragments and worry about purging them, plus for
-nagios you'll also be exporting and collecting the resources.  In short it's a
-lot of moving parts to than you need to keep in the air.
+Also the logic of it can be quite complex to follow.
 
-## and introducing datacat
+## introducing datacat
 
 XXX datacat is not the best name, give me a better one
 
@@ -151,4 +154,8 @@ Revisiting the nagios hostgroups pattern, with datacat it would look like this:
     class ntp {
         nagios::host { "ntp server: }
     }
+
+Hopefully the datacat types provide a general enough model to allow you
+to manage arbritary files you build up with data, and the interface
+should be clearer than dropping multiple fragment files.
 
