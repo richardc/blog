@@ -9,8 +9,6 @@ configuring natively supports a conf.d style this is quite straightforward, you
 just drop files from whereever makes sense, but for a single-file resource you
 need to use one of the concatenation patterns available to you with puppet.
 
-## concat
-
 Probably the most widely-used concatenation pattern is to use
 R.I.Pienaar's excellent puppet-concat module.
 
@@ -46,12 +44,10 @@ to the /etc/motd file from multiple classes.
 classes to add things to the same line you need to use something a little more
 complex.
 
-## fragment stitching pattern
-
-The pattern I find myself using for this kind of configuation you could
-call a 'fragment stitching' pattern. You drop data fragments into a temporary
-location, then you run a script that parses those parse those fragments
-assembles them into your intended configuration file.
+The pattern I find myself using for this kind of configuration you could
+describe as a 'fragment stitching' pattern. You drop data fragments into
+a temporary location, then you run a script that parses those those
+fragments and assembles them into your intended configuration file.
 
 Here's a worked example of this for a nagios class that manages the
 definition of hostgroups.
@@ -112,18 +108,14 @@ definition of hostgroups.
         nagios::host { "ntp server: }
     }
 
-This works but the major drawback is you need to write a new assembly
-script each time you use it, also you end up with a bunch of intermediate
-files in a build directory to manage.
+This works but the major drawback is that you need to write a new assembly
+script each time you use it, and there's all those intermediate
+files in a build directory to manage.  In short it's complex and hard to
+follow.
 
-Also the logic of it can be quite complex to follow.
-
-## introducing datacat
-
-XXX datacat is not the best name, give me a better one
-
-Having implemented the stitching pattern more than enough times I looked
-at moving the reassembly step into a template evaluation step.
+Having implemented this stitching pattern more than enough times I started to
+think about the practicality of moving to a more data-oriented model, where the
+reassembly step can be a straightforward template evaluation step.
 
 Revisiting the nagios hostgroups pattern, with datacat it would look like this:
 
@@ -160,6 +152,6 @@ Hopefully the datacat types provide a general enough model to allow you
 to manage arbritary files you build up with data, and the interface
 should be clearer than dropping multiple fragment files.
 
-I have some rough edges to sand away and more testing to do, but datacat should
-be available from the forge in a few days.
-
+I have some rough edges to sand away, which may include giving it a
+better name, and much more testing to do, but datacat should be
+available from the forge in a few days.
