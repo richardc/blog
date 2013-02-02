@@ -105,7 +105,7 @@ $output_file  = '/etc/nagios/objects/hostgroups.cfg'
 hostgroups = {}
 Dir($fragment_dir).each do |filename|
     next unless filename =~ /\.yml$/
-    fragment = YAML.load_file("#{fragment_dir}/#{filename}")
+    fragment = YAML.load_file("#{$fragment_dir}/#{filename}")
     hostgroups[fragment['hostgroup']] ||= []
     hostgroups[fragment['hostgroup']] << fragment['hostname']
 end
@@ -125,7 +125,7 @@ File.open($output_file, "w") { |f| f.write(assembled) }
 {% highlight puppet %}
 # ntp/manifests/init.pp
 class ntp {
-    nagios::host { "ntp server: }
+    nagios::host { 'ntp server': }
 }
 {% endhighlight %}
 
