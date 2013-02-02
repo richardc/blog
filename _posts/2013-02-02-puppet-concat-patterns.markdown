@@ -13,11 +13,10 @@ out a new file from each class that's interested and call it done.
 
 The complexity comes when you have a single file that you need to
 manage.  At that point it's time to break out one of the concatenation
-options available to you with puppet.
+options available.
 
-Probably the most widely-used concatenation pattern is to use
-R.I.Pienaar's excellent
-[puppet-concat](https://github.com/ripienaar/puppet-concat) module.
+Probably the most widely-used concatenation module is R.I.Pienaar's
+excellent [puppet-concat](https://github.com/ripienaar/puppet-concat).
 
 If you're not familiar with it here's a worked example of adding lines
 to the /etc/motd file from multiple classes.
@@ -47,9 +46,9 @@ to the /etc/motd file from multiple classes.
         motd::line { "this machine has chrome on it": }
     }
 
-`concat` is great when your files are line-oriented, but when you need multiple
-classes to add things to the same line you need to use something a little more
-complex.
+`puppet-concat` is great when your files are line-oriented, but when you
+need multiple classes to add things to the same line you need to use
+something a little more complex.
 
 The pattern I find myself using for this kind of configuration you could
 describe as a 'fragment stitching' pattern. You drop data fragments into
@@ -118,9 +117,10 @@ definition of hostgroups.
 This works but the major drawback is that you need to write a new
 assembly script each time you use it.  Also there are the intermediate files
 and a build directory to worry about.  This can make it a little hard to follow
-which isn't a good look for your modules.
+which isn't the best thing in your modules, even if you do hide the complexity
+away with definitions.
 
-Having implemented this stitching pattern more than enough times I started to
+Having implemented this stitching pattern enough times I started to
 think about the practicality of moving to a more data-oriented model, where the
 reassembly step can be a straightforward template evaluation step.  What shook
 out is a module called [datacat](https://github.com/richardc/puppet-datacat).
@@ -156,10 +156,13 @@ Revisiting the nagios hostgroups pattern, with datacat it would look like this:
         nagios::host { "ntp server: }
     }
 
-Hopefully the datacat types provide a general enough model to allow you
-to manage files that you build up with data, and the interface should be
-clearer than dropping multiple fragment files.
+The datacat types should provide a general enough model to allow you
+to manage files that you build up with data, and what's exposed in your
+manifests is cleaner than the machinery involved in managing multiple
+fragment files.
 
-I have some rough edges to sand away, which may include giving it a
+There are still a couple of rough edges to sand away, one of which may
+be giving it a more obvious name, but it should be available from the
+[forge](http://forge.puppetlabs.com/) in a few days.
 better name, and much more testing to do, but datacat should be
-available from the [forge](http://forge.puppetlabs.com/) in a few days.
+
