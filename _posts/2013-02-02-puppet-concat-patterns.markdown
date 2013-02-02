@@ -46,14 +46,15 @@ to the /etc/motd file from multiple classes.
 classes to add things to the same line you need to use something a little more
 complex.
 
-## The stitching pattern
+## fragment stitching pattern
 
-The typical pattern I use for this is what I call stitching.  You write files
-containing data fragments to a temporary location, then you have a script to
-parse those fragments and emit your config file.
+The pattern I find myself using for this kind of configuation you could
+call a 'fragment stitching' pattern. You drop data fragments into a temporary
+location, then you run a script that parses those parse those fragments
+assembles them into your intended configuration file.
 
-Here's a worked example of the pattern for a nagios class that manages
-the definition of hostgroups.
+Here's a worked example of this for a nagios class that manages the
+definition of hostgroups.
 
     # nagios/manifests/init.pp
     class nagios {
