@@ -21,30 +21,37 @@ excellent [puppet-concat](https://github.com/ripienaar/puppet-concat).
 If you're not familiar with it here's a worked example of adding lines
 to the /etc/motd file from multiple classes.
 
-    # motd/manifests/init.pp
-    class motd {
-        concat { '/etc/motd': }
+{% highlight puppet %}
+# motd/manifests/init.pp
+class motd {
+    concat { '/etc/motd': }
 
-        concat::fragment { 'motd_header':
-            target  => '/etc/motd',
-            content => "Hello ${::fqdn}\n",
-            order   => '01',
-        }
+    concat::fragment { 'motd_header':
+        target  => '/etc/motd',
+        content => "Hello ${::fqdn}\n",
+        order   => '01',
     }
+}
+{% endhighlight %}
 
-    # motd/manifests/line.pp
-    define motd::line {
-        concat::fragment { "motd_${title}":
-            target  => '/etc/motd',
-            content => "${title}\n",
-            order   => '10',
-        }
+{% highlight puppet %}
+# motd/manifests/line.pp
+define motd::line {
+    concat::fragment { "motd_${title}":
+        target  => '/etc/motd',
+        content => "${title}\n",
+        order   => '10',
     }
+}
+{% endhighlight %}
 
-    # chrome/manifests/init.pp
-    class chrome {
-        motd::line { "this machine has chrome on it": }
-    }
+{% highlight puppet %}
+# chrome/manifests/init.pp
+class chrome {
+    motd::line { "this machine has chrome on it": }
+}
+{% endhighlight %}
+
 
 `puppet-concat` is great when your files are line-oriented, but when you
 need multiple classes to add things to the same line you need to use
@@ -58,61 +65,70 @@ fragments and assembles them into your intended configuration file.
 Here's a worked example of this for a nagios class that manages the
 definition of hostgroups.
 
-    # nagios/manifests/init.pp
-    class nagios {
-        file { '/etc/nagios/build':
-            ensure  => directory,
-            purge   => true,
-            recurse => true,
-            notify  => Exec['nagios_assemble_hostgroups'],
-        }
-
-        file { '/etc/nagios/build/assemble_hostgroups':
-            source => 'puppet:///modules/nagios/assemble_hostgroups',
-            mode => '0755',
-        }
-
-        exec { 'nagios_assemble_hostgroups',
-            command => '/etc/nagios/build/assemble_hostgroups'
-        }
+{% highlight puppet %}
+# nagios/manifests/init.pp
+class nagios {
+    file { '/etc/nagios/build':
+        ensure  => directory,
+        purge   => true,
+        recurse => true,
+        notify  => Exec['nagios_assemble_hostgroups'],
     }
 
-    # nagios/manifests/host.pp
-    define nagios::host($hostgroup = $title) {
-        file { "/etc/nagios/build/__HOST_${::hostname}_${hostgroup}.yml",
-            content => "{ 'host': '${::hostname}', 'hostgroup': '${hostgroup}' }\n",
-            notify  => Exec['nagios_assemble_hostgroups'],
-        }
+    file { '/etc/nagios/build/assemble_hostgroups':
+        source => 'puppet:///modules/nagios/assemble_hostgroups',
+        mode => '0755',
     }
 
-    # nagios/files/assemble_hostgroups
-    #/usr/bin/env ruby
-    $fragment_dir = '/etc/nagios/build'
-    $output_file  = '/etc/nagios/objects/hostgroups.cfg'
-
-    hostgroups = {}
-    Dir($fragment_dir).each do |filename|
-        next unless filename =~ /\.yml$/
-        fragment = YAML.load_file("#{fragment_dir}/#{filename}")
-        hostgroups[fragment['hostgroup']] ||= []
-        hostgroups[fragment['hostgroup']] << fragment['hostname']
-    end
-
-    assembled = ""
-    hostgroups.keys.sort.each do |hostgroup|
-         assembled = assembled + "
-    define hostgroup {
-         name    #{hostgroup}
-         members #{hostgroups[hostgroup].sort.join(',')}
-    }"
-    end
-
-    File.open($output_file, "w") { |f| f.write(assembled) }
-
-    # ntp/manifests/init.pp
-    class ntp {
-        nagios::host { "ntp server: }
+    exec { 'nagios_assemble_hostgroups',
+        command => '/etc/nagios/build/assemble_hostgroups'
     }
+}
+{% endhighlight %}
+
+{% highlight puppet %}
+# nagios/manifests/host.pp
+define nagios::host($hostgroup = $title) {
+    file { "/etc/nagios/build/__HOST_${::hostname}_${hostgroup}.yml",
+        content => "{ 'host': '${::hostname}', 'hostgroup': '${hostgroup}' }\n",
+        notify  => Exec['nagios_assemble_hostgroups'],
+    }
+}
+{% endhighlight %}
+
+{% highlight ruby %}
+# nagios/files/assemble_hostgroups
+#/usr/bin/env ruby
+$fragment_dir = '/etc/nagios/build'
+$output_file  = '/etc/nagios/objects/hostgroups.cfg'
+
+hostgroups = {}
+Dir($fragment_dir).each do |filename|
+    next unless filename =~ /\.yml$/
+    fragment = YAML.load_file("#{fragment_dir}/#{filename}")
+    hostgroups[fragment['hostgroup']] ||= []
+    hostgroups[fragment['hostgroup']] << fragment['hostname']
+end
+
+assembled = ""
+hostgroups.keys.sort.each do |hostgroup|
+        assembled = assembled + "
+define hostgroup {
+        name    #{hostgroup}
+        members #{hostgroups[hostgroup].sort.join(',')}
+}"
+end
+
+File.open($output_file, "w") { |f| f.write(assembled) }
+{% endhighlight %}
+
+{% highlight puppet %}
+# ntp/manifests/init.pp
+class ntp {
+    nagios::host { "ntp server: }
+}
+{% endhighlight %}
+
 
 This works but the major drawback is that you need to write a new
 assembly script each time you use it.  Also there are the intermediate files
@@ -127,34 +143,43 @@ out is a module called [datacat](https://github.com/richardc/puppet-datacat).
 
 Revisiting the nagios hostgroups pattern, with datacat it would look like this:
 
-    # nagios/manifests/init.pp
-    class nagios {
-        datacat { '/etc/nagios/objects/hostgroups.cfg':
-            template => 'nagios/hostgroups.cfg.erb',
-        }
+{% highlight puppet %}
+# nagios/manifests/init.pp
+class nagios {
+    datacat { '/etc/nagios/objects/hostgroups.cfg':
+        template => 'nagios/hostgroups.cfg.erb',
     }
+}
+{% endhighlight %}
 
-    # nagios/manifests/host.pp
-    define nagios::host($hostgroup = $title) {
-        datacat_fragment { "nagios::host[${hostgroup}]":
-            data => {
-                $hostgroup => [ $::hostname ],
-            },
-        }
+{% highlight puppet %}
+# nagios/manifests/host.pp
+define nagios::host($hostgroup = $title) {
+    datacat_fragment { "nagios::host[${hostgroup}]":
+        data => {
+            $hostgroup => [ $::hostname ],
+        },
     }
+}
+{% endhighlight %}
 
-    # nagios/templates/hostgroups.cfg.erb
-    <% @data.keys.sort.each do |hostgroup| %>
-    define hostgroup {
-         name    <%= hostgroup %>
-         members <%= @data[hostgroup].sort.join(',') %>
-    }
-    <% end %>
+{% highlight puppet %}
+# nagios/templates/hostgroups.cfg.erb
+<% @data.keys.sort.each do |hostgroup| %>
+define hostgroup {
+        name    <%= hostgroup %>
+        members <%= @data[hostgroup].sort.join(',') %>
+}
+<% end %>
+{% endhighlight %}
 
-    # ntp/manifests/init.pp
-    class ntp {
-        nagios::host { "ntp server: }
-    }
+{% highlight puppet %}
+# ntp/manifests/init.pp
+class ntp {
+    nagios::host { "ntp server: }
+}
+{% endhighlight %}
+
 
 The datacat types should provide a general enough model to allow you
 to manage files that you build up with data, and what's exposed in your
