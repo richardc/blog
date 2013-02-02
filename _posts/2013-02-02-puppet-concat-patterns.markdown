@@ -163,7 +163,7 @@ define nagios::host($hostgroup = $title) {
 }
 {% endhighlight %}
 
-{% highlight puppet %}
+{% highlight erb %}
 # nagios/templates/hostgroups.cfg.erb
 <% @data.keys.sort.each do |hostgroup| %>
 define hostgroup {
@@ -176,7 +176,7 @@ define hostgroup {
 {% highlight puppet %}
 # ntp/manifests/init.pp
 class ntp {
-    nagios::host { "ntp server: }
+    nagios::host { 'ntp server': }
 }
 {% endhighlight %}
 
