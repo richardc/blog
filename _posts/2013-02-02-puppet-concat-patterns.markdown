@@ -10,7 +10,7 @@ just drop files from whereever makes sense, but for a single-file resource you
 need to use one of the concatenation modules.
 
 
-** concat
+## concat
 
 The original and probably most-widely used concatenation module is
 R.I.Pienaar's puppet-concat module, if you're not familiar with it
@@ -41,11 +41,11 @@ here's a worked example of adding metadata to the /etc/motd file
         motd::line { "this machine has chrome on it": }
     }
 
-Concat is great when your files are line-oriented, but when you need multiple
+`concat` is great when your files are line-oriented, but when you need multiple
 classes to add things to the same line you need to use something a little more
 complex.
 
-** The stitching pattern
+## The stitching pattern
 
 The typical pattern I use for this is what I call stitching, you write files
 containing data fragments to a temporary location, then write a script which
@@ -114,7 +114,7 @@ and you need to add data fragments and worry about purging them, plus for
 nagios you'll also be exporting and collecting the resources.  In short it's a
 lot of moving parts to than you need to keep in the air.
 
-** and now datacat
+## and introducing datacat
 
 XXX datacat is not the best name, give me a better one
 
