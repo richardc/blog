@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Puppet concat patterns"
+tags: [ 'puppet', 'datacat', 'concat' ]
 ---
 
 It's common to want to configure a shared resource from many classes in your

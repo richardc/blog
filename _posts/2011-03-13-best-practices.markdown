@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'I hate "Best Practices"'
+tags:  ['opinion', 'best practices']
 ---
 
 As a fairly cranky individual there are a few phrases that in the past have

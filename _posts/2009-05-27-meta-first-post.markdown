@@ -2,6 +2,7 @@
 layout: post
 bargo: 2009-05-27 19:27:32
 title: Obligatory meta first post
+tags: ['blogging', 'meta']
 ---
 
 Not that it should matter, but this blog is running under
