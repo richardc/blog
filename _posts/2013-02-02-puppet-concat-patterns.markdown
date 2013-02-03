@@ -189,5 +189,3 @@ fragment files.
 There are still a couple of rough edges to sand away, one of which may
 be giving it a more obvious name, but it should be available from the
 [forge](http://forge.puppetlabs.com/) in a few days.
-better name, and much more testing to do, but datacat should be
-
