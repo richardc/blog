@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Idiom of the day: Find the error"
-tags:  ['idioms','debugging']
+tags:  [ 'idioms', 'debugging' ]
 ---
 
 Today's idiom of the day is a debugging one.

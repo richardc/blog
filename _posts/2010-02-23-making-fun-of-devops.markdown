@@ -1,7 +1,7 @@
 ---
 layout: post
 title: When making fun of devops backfires
-tags:  ['puppet','cucumber','devops']
+tags:  [ 'puppet', 'cucumber', 'devops' ]
 ---
 
 In the last couple of weeks I've been playing with

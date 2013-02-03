@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Local install roundup
-tags:  ['python','perl','ruby']
+tags:  [ 'python', 'perl', 'ruby' ]
 ---
 
 There are going to be times when you need to stray outside your packaging
