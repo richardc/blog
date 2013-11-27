@@ -159,7 +159,8 @@ class nagios {
 {{< highlight puppet >}}
 # nagios/manifests/host.pp
 define nagios::host($hostgroup = $title) {
-    datacat_fragment { "nagios::host[${hostgroup}]":
+datacat_fragment { "nagios::host[${hostgroup}]":
+        target => '/etc/nagios/objects/hostgroups.cfg',
         data => {
             $hostgroup => [ $::hostname ],
         },
