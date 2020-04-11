@@ -3,6 +3,7 @@ title = "richardc"
 
 paginate = "10"
 disqusShortname = "richardc"
+enableRobotsTXT = true
 
 [module]
 # Mount everything that's in modules into the site
@@ -51,6 +52,7 @@ subtitle = "Sometimes ideas come out"
 description = "Richard Clamp's personal site.  Mostly technical.  Sometimes the blog is written in."
 copyright = "Richard Clamp"
 authorbox = true
+readmore = true
 toc = false
 post_navigation = true
 post_meta = [ "date", "categories" ]
