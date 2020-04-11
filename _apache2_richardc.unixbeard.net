@@ -1,24 +1,24 @@
 #-*- mode: apache -*-
 <VirtualHost *:80>
-	ServerAdmin webmaster@unixbeard.net
-	ServerName richardc.unixbeard.net
+  ServerAdmin webmaster@unixbeard.net
+  ServerName richardc.unixbeard.net
 
-	DocumentRoot /home/richardc/hck/blog/public
-	<Directory /home/richardc/hck/blog/index>
-		Options Indexes FollowSymLinks
-		AllowOverride None
-		Order allow,deny
-		allow from all
-                Require all granted
-	</Directory>
-        RewriteEngine On
+  DocumentRoot /home/richardc/hck/blog/public
+  <Directory /home/richardc/hck/blog/public>
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    allow from all
+    Require all granted
+  </Directory>
+  RewriteEngine On
 
-	# compatibility for old Bryar rss/atom feed urls
-	RewriteCond %{QUERY_STRING} ^format=atom$
-	RewriteRule ^. /atom.xml?  [R=301,L]
+  # compatibility for old Bryar rss/atom feed urls
+  RewriteCond %{QUERY_STRING} ^format=atom$
+  RewriteRule ^. /atom.xml?  [R=301,L]
 
-  RedirectMatch 301 "^/(\d\d\d\d)" "/blog/$1"
+  RedirectMatch 301 "^/(\d\d\d\d.*)" "/blog/$1"
 
-	ErrorLog /var/log/apache2/richardc.unixbeard.net_error.log
-	CustomLog /var/log/apache2/richardc.unixbeard.net_access.log combined
+  ErrorLog /var/log/apache2/richardc.unixbeard.net_error.log
+  CustomLog /var/log/apache2/richardc.unixbeard.net_access.log combined
 </VirtualHost>
