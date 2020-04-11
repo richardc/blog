@@ -5,7 +5,6 @@ tags:
 - cucumber
 - devops
 title: When making fun of devops backfires
-url: /2010/02/making-fun-of-devops/
 ---
 
 In the last couple of weeks I've been playing with

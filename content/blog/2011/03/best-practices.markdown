@@ -4,7 +4,6 @@ tags:
 - opinion
 - best practices
 title: I hate "Best Practices"
-url: /2011/03/best-practices
 ---
 
 As a fairly cranky individual there are a few phrases that in the past have

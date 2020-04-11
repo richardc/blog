@@ -1,3 +1,4 @@
+#-*- mode: apache -*-
 <VirtualHost *:80>
 	ServerAdmin webmaster@unixbeard.net
 	ServerName richardc.unixbeard.net
@@ -12,8 +13,10 @@
 	RewriteEngine On
 
 	# compatibility for old Bryar rss/atom feed urls
-	RewriteCond %{QUERY_STRING} ^format=atom$ 
-	RewriteRule ^. /atom.xml?  [R=301,L] 
+	RewriteCond %{QUERY_STRING} ^format=atom$
+	RewriteRule ^. /atom.xml?  [R=301,L]
+
+  RedirectMatch 301 "^/(\d\d\d\d)" "/blog/$1"
 
 	ErrorLog /var/log/apache2/richardc.unixbeard.net_error.log
 	CustomLog /var/log/apache2/richardc.unixbeard.net_access.log combined

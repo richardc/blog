@@ -4,7 +4,6 @@ tags:
 - idioms
 - debugging
 title: 'Idiom of the day: Find the error'
-url: /2011/07/idiom-debugging
 ---
 
 Today's idiom of the day is a debugging one.

@@ -5,7 +5,6 @@ tags:
 - perl
 - ruby
 title: Local install roundup
-url: /2010/02/local-install/
 ---
 
 There are going to be times when you need to stray outside your packaging

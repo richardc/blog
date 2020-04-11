@@ -5,7 +5,6 @@ tags:
 - datacat
 - concat
 title: Puppet concat patterns
-url: /2013/03/puppet-concat-patterns/
 ---
 
 It's common to want to configure a shared resource from many classes in your
