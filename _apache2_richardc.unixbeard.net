@@ -9,8 +9,9 @@
 		AllowOverride None
 		Order allow,deny
 		allow from all
+                Require all granted
 	</Directory>
-	RewriteEngine On
+        RewriteEngine On
 
 	# compatibility for old Bryar rss/atom feed urls
 	RewriteCond %{QUERY_STRING} ^format=atom$
