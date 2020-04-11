@@ -2,9 +2,9 @@
 	ServerAdmin webmaster@unixbeard.net
 	ServerName richardc.unixbeard.net
 
-	DocumentRoot /home/richardc/hck/blog/_site
-	<Directory /home/richardc/hck/blog/_site>
-		Options Indexes FollowSymLinks ExecCGI
+	DocumentRoot /home/richardc/hck/blog/public
+	<Directory /home/richardc/hck/blog/index>
+		Options Indexes FollowSymLinks
 		AllowOverride None
 		Order allow,deny
 		allow from all
@@ -12,8 +12,6 @@
 	RewriteEngine On
 
 	# compatibility for old Bryar rss/atom feed urls
-	RewriteCond %{QUERY_STRING} ^format=rss$ 
-	RewriteRule ^. /rss.xml?  [R=301,L] 
 	RewriteCond %{QUERY_STRING} ^format=atom$ 
 	RewriteRule ^. /atom.xml?  [R=301,L] 
 

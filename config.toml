@@ -1,0 +1,79 @@
+baseURL = "http://richardc.unixbeard.net/"
+title = "richardc"
+
+paginate = "10"
+disqusShortname = "richardc"
+
+[module]
+# Mount everything that's in modules into the site
+[[module.mounts]]
+source = "content"
+target = "content"
+
+[[module.mounts]]
+source = "static"
+target = "static"
+
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+
+[[module.mounts]]
+source = "data"
+target = "data"
+
+[[module.mounts]]
+source = "assets"
+target = "assets"
+
+[[module.mounts]]
+source = "i18n"
+target = "i18n"
+
+[[module.mounts]]
+source = "archetypes"
+target = "archetypes"
+
+
+# These are the modules
+[[module.imports]]
+# https://themes.gohugo.io/mainroad/
+path = "github.com/Vimux/Mainroad"
+
+[[module.imports]]
+path = "github.com/kaushalmodi/hugo-atom-feed"
+
+[Author]
+name = "Richard Clamp"
+
+[Params]
+subtitle = "Sometimes ideas come out"
+description = "Richard Clamp's personal site.  Mostly technical.  Sometimes the blog is written in."
+copyright = "Richard Clamp"
+authorbox = true
+toc = false
+post_navigation = true
+post_meta = [ "date", "categories" ]
+dateFormat = "2006-01-02"
+
+[Params.sidebar]
+home = "left" # Configure layout for home page
+list = "left"  # Configure layout for list pages
+single = "left"
+widgets = ["recent", "categories", "taglist", "social"]
+
+[Params.widgets]
+recent_num = 5 # Set the number of articles in the "Recent articles" widget
+tags_counter = true # Enable counter for each tag in "Tags" widget
+
+[Params.widgets.social]
+# Enable parts of social widget
+github = "richardc"
+gitlab = "richardc"
+email = "richardc@unixbeard.net"
+
+[Permalinks]
+posts = "/:year/:month/:title/"
+
+[Outputs]
+home = ["html", "atom"]

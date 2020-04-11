@@ -1,3 +1,0 @@
-#!/bin/sh
-export PATH=$HOME/hck/vim-pygments:$HOME/hck/python-virtualenv/bin:$PATH
-~/.gem/ruby/1.8/bin/jekyll
