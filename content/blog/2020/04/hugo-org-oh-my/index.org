@@ -1,22 +1,25 @@
 #+title: Rework all the dotfiles!
-#+date: 2020-04-11
+#+date: 2020-04-12
 #+tags[]: emacs hugo meta org-mode dotfiles
-#+draft: true
 
 In these quiet times of staying home and not touching anyone I've spent
-many peaceful hours revisiting my [[https://github.com/richardc/dotfiles][dotfiles]] and coding environment
-setup.
+many peaceful hours revisiting my [[https://github.com/richardc/dotfiles][dotfiles]] and coding environment.
+Here are some of the highlights:
 
 * org-mode
 I've switched to using [[https://orgmode.org/][org-mode]] for writing and thinking.
 
 It's the markdown I always wanted but never really spoke about, and
-seems free from the soup of multiple implementations that
+it seems free from the soup of multiple implementations that
 [[https://www.iana.org/assignments/markdown-variants/markdown-variants.xhtml][markdown suffers]].
 
-One thing I've taken to doing is having a directory per experiment,
-with an =index.org= file, that tangles out code snippets, so I can
-interleave narrative with code.  It's so nice to work with.
+One thing I've taken to doing is having a new directory in my ~/notes
+folder for any bit of investigation I'm doing.  In that you keep an
+org-mode file with notes and various bits of code you're trying, the
+code can be tangled (extracted) into files to run or the results could
+be captured directly back in the notes file.  For example -
+[[https://github.com/richardc/blog/tree/master/content/blog/2020/04/debugging-ergodone.org][debugging-ergodone.org]] is a file I captured as I was debugging my
+keyboard, think of it as a bonus post if you like.
 
 Many other blog posts exist explain how org-mode is a
 magical/non-magical tool so I won't go on, beyond saying you should
@@ -24,15 +27,17 @@ really check it out.
 
 * emacs
 org-mode moved [[https://www.gnu.org/software/emacs/][emacs]] back into play as my main editor/environment.
-I've mained emacs in the past, but more recently I've been mostly
-using [[https://www.vim.org/][vim]] and [[https://code.visualstudio.com/][Visual Studio Code]]
+I've used emacs for long stretches of time in the past, but recently
+I'd been using a mix of [[https://www.vim.org/][vim]] and [[https://code.visualstudio.com/][Visual Studio Code]].
 
-I'm using an inconsistently documented setup in my dotfiles.
-Other modes that are really worth calling out are [[https://github.com/emacs-evil/evil][evil]] for vi
-emulation, and [[https://magit.vc/][Magit]] for git.
+Modes/packages worth calling out are [[https://github.com/emacs-evil/evil][evil]] for vi emulation, and [[https://magit.vc/][Magit]]
+for git.
 
-I haven't quite broken the habit of having a separate terminal, but
-quite often it's just there auto-running commands using [[http://eradman.com/entrproject/][entr]].
+* entr
+Many ecosystems have some variant of the run action on filesystem
+change pattern, including full service options like [[https://facebook.github.io/watchman/][watchman,]] but for
+a quick cli/shellscript fix I've been enjoying the flexibility and
+simplicity of [[http://eradman.com/entrproject/][entr]].
 
 * Hugo
 Everything they say about [[https://gohugo.io/][Hugo]] seems to be true.  It's really fast,
@@ -42,3 +47,6 @@ it.
 * meta
 Apologies to anyone actually subscribed to my atom feed, the
 switch to Hugo will probably have made everything old look new again.
+
+The changes to make the blogging work like my note-taking  workflow might
+result in more frequent posts, but probably not.
