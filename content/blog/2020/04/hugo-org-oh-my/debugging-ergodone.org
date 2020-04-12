@@ -1,0 +1,327 @@
+#+title: Debugging the ergodone
+
+* Introduction
+
+The ergodone is a variant of the ergodox, with a prefab pcb just
+solder on your own keyswitches and presto!
+
+https://github.com/ktec-hq/ErgoDone
+
+https://mechboards.co.uk/product/ktec-ergodox-kit/
+
+I added keyswitches from a donor keyboard, and though I see the
+keyboard as a usb device once it's flashed, keys aren't happening.
+The keyboard had been sitting part-assembled in a box for a few
+years as debugging it at the time seemed beyond reach, but I've been
+doing some other arduino stuff lately so...
+
+It uses an Arduino Pro Micro which you can connect to
+via a micro-usb socket for programming/debugging.
+
+** Unbricking the Pro Micro
+Whatever state I'd left the controller in, it wasn't happy.  Followed
+the instructions for using my Arduino Uno as an [[https://www.arduino.cc/en/tutorial/arduinoISP][ISP]], and was able to
+flash a bootloader to it.
+
+
+* Keyswitch debugging
+
+Next we need to check the keyswitches were soldered in correctly.
+With a checkout of qmk_firmware to copy a bunch of the
+matrix-scanning code, we lash together this sketch to check just
+that.
+
+*** hacky sketch
+
+This inlines parts of the qmk_firmware, and then hooks it into
+Serial.print() so we can see if the matrix is working.
+
+#+begin_src arduino :tangle keyswitch-debug.ino :comments link
+#include "config.h"
+#include "matrix.h"
+extern "C" {
+	// Don't do things with the expander
+	void expander_unselect_rows() {}
+	void expander_select_row(unsigned char) {}
+	void expander_scan() {}
+	matrix_row_t expander_read_row() {}
+	void expander_init() {}
+	void matrix_scan_quantum() {}
+}
+#include "matrix.c"
+#include "util.c"
+
+#undef print
+#undef println
+
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)										\
+	(byte & 0x80 ? '1' : '0'),										\
+		(byte & 0x40 ? '1' : '0'),									\
+		(byte & 0x20 ? '1' : '0'),									\
+		(byte & 0x10 ? '1' : '0'),									\
+		(byte & 0x08 ? '1' : '0'),									\
+		(byte & 0x04 ? '1' : '0'),									\
+		(byte & 0x02 ? '1' : '0'),									\
+		(byte & 0x01 ? '1' : '0')
+
+void my_matrix_print(void)
+{
+	static char buf[80];
+	Serial.print("\nr/c 0123456789ABCDEF\n");
+	for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+		sprintf(buf, "%02x: "BYTE_TO_BINARY_PATTERN"\n", row, BYTE_TO_BINARY(matrix[row]));
+		Serial.print(buf);
+	}
+}
+int RXLED = 17;  // The RX LED has a defined Arduino pin
+
+void setup()
+{
+	Serial.begin(BAUD);
+	pinMode(RXLED, OUTPUT);  // Set RX LED as an output
+	matrix_power_up();
+}
+
+void loop()
+{
+	digitalWrite(RXLED, LOW);   // set the RX LED ON
+	Serial.print("Hello world!\n");  // Print "Hello World" to the Serial Monitor
+	delay(200);
+	digitalWrite(RXLED, HIGH);    // set the RX LED OFF
+	matrix_scan();
+	my_matrix_print();
+}
+
+#+end_src
+
+*** auto-upload sketch
+Compile, upload on file change
+
+#+begin_src shell :tangle upload.sh :comments link
+#!/bin/bash
+set -x
+set -e
+SKETCH=keyswitch-debug.ino
+BOARD=arduino:avr:micro
+COMPILED="${SKETCH}.$(echo $BOARD | tr : .).hex"
+BAUD=9600
+PORT=/dev/cu.usbmodem1A12301
+CFLAGS="-DBAUD=${BAUD}"
+CFLAGS="$CFLAGS -I$HOME/src/qmk_firmware/keyboards/ergodone"
+CFLAGS="$CFLAGS -I$HOME/src/qmk_firmware/tmk_core/common"
+CFLAGS="$CFLAGS -I$HOME/src/qmk_firmware/quantum"
+CFLAGS="$CFLAGS -I$HOME/src/qmk_firmware/quantum/audio"
+CFLAGS="$CFLAGS -I$HOME/src/qmk_firmware/quantum/process_keycode"
+CFLAGS="$CFLAGS -I$HOME/src/qmk_firmware/drivers/avr"
+
+# recompile and upload on change - sleep as we're programming it directly, and it's an Arduino micro
+ls $SKETCH | entr -rs "
+		arduino-cli compile --build-properties build.extra_flags='$CFLAGS' --fqbn ${BOARD} ${SKETCH} &&
+		arduino-cli upload --fqbn ${BOARD} --port ${PORT} --input ${COMPILED} --verify &&
+		sleep 2 &&
+		stty -f ${PORT} ${BAUD} &&
+		cat ${PORT}
+"
+#+end_src
+
+*** success keyswitches are fine on the left
+
+#+BEGIN_SRC shell
+$ cat /dev/cu.usbmodem1A12301
+r/c 0123456789ABCDEF
+00: 00000000
+01: 00000010
+02: 00010010
+03: 00010000
+04: 00000000
+05: 00000000
+Hello world!
+#+END_SRC
+
+
+* Firmware =qmk_firmware=
+The common choice for firmware seems to be [[https://github.com/qmk/qmk_firmware][qmk_firmware]].  It supports
+many homebrew keyboards, not just the ergodone.
+
+Ergodone support is here:
+
+https://github.com/qmk/qmk_firmware/tree/master/keyboards/ergodone
+
+
+=qmk= guides you thorugh all the setup quite nicely:
+
+https://docs.qmk.fm/#/newbs_getting_started
+
+#+BEGIN_SRC shell
+$ qmk-compile
+Ψ Compiling keymap with make ergodone:richardc
+
+
+QMK Firmware 0.8.106
+Making ergodone with keymap richardc
+
+avr-gcc (Homebrew AVR GCC 8.4.0) 8.4.0
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Size before:
+text    data     bss     dec     hex filename
+0   26906       0   26906    691a .build/ergodone_richardc.hex
+
+Compiling: keyboards/ergodone/keymaps/richardc/keymap.c                                             [OK]
+Compiling: tmk_core/common/command.c                                                                [OK]
+Linking: .build/ergodone_richardc.elf                                                               [OK]
+Creating load file for flashing: .build/ergodone_richardc.hex                                       [OK]
+Copying ergodone_richardc.hex to qmk_firmware folder                                                [OK]
+Checking file size of ergodone_richardc.hex                                                         [OK]
+,* The firmware size is fine - 26906/28672 (93%, 1766 bytes free)
+#+END_SRC
+
+And qmk-toolbox automates the flashing well enough.
+
+#+BEGIN_SRC shell
+,*** Caterina device connected
+,*** Attempting to flash, please don't remove device
+	    Found port: /dev/cu.usbmodem1A12301
+	>>> avrdude -p atmega32u4 -c avr109 -U flash:w:/Users/richardc/src/qmk_firmware/ergodone_richardc.hex:i -P /dev/cu.usbmodem1A12301 -C avrdude.conf
+
+	    Connecting to programmer: .
+	    Found programmer: Id = "CATERIN"; type = S
+		Software Version = 1.0; No Hardware Version given.
+	    Programmer supports auto addr increment.
+	    Programmer supports buffered memory access with buffersize=128 bytes.
+
+	    Programmer supports the following devices:
+		Device code: 0x44
+
+	    avrdude: AVR device initialized and ready to accept instructions
+
+	    Reading | ################################################## | 100% 0.00s
+
+	    avrdude: Device signature = 0x1e9587 (probably m32u4)
+	    avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+		    To disable this feature, specify the -D option.
+	    avrdude: erasing chip
+	    avrdude: reading input file "/Users/richardc/src/qmk_firmware/ergodone_richardc.hex"
+	    avrdude: writing flash (26906 bytes):
+
+	    Writing | ################################################## | 100% 2.13s
+
+	    avrdude: 26906 bytes of flash written
+	    avrdude: verifying flash memory against /Users/richardc/src/qmk_firmware/ergodone_richardc.hex:
+	    avrdude: load data flash data from input file /Users/richardc/src/qmk_firmware/ergodone_richardc.hex:
+	    avrdude: input file /Users/richardc/src/qmk_firmware/ergodone_richardc.hex contains 26906 bytes
+	    avrdude: reading on-chip flash data:
+
+	    Reading | ################################################## | 100% 0.24s
+
+	    avrdude: verifying ...
+	    avrdude: 26906 bytes of flash verified
+
+	    avrdude done.  Thank you.
+
+	,*** Caterina device disconnected
+	,*** K.T.E.C. - ErgoDone connected -- 1209:2328
+#+END_SRC
+
+* Testing
+After flashing =qmk_firmware= we *should* have a working keyboard.
+It seems to be a working USB device, as far as it's name on a bus:
+
+** OSX
+*** 'lsusb'
+
+#+BEGIN_SRC shell
+$ system_profiler SPUSBDataType -json | gron | grep -B1 -A10  ErgoDone                         214ms < Wed  8 Apr 16:25:31 2020
+2020-04-08 16:25:37.114 system_profiler[55378:568945] SPUSBDevice: IOCreatePlugInInterfaceForService failed 0xe00002be
+2020-04-08 16:25:37.115 system_profiler[55378:568945] SPUSBDevice: IOCreatePlugInInterfaceForService failed 0xe00002be
+json.SPUSBDataType[2]._items[0] = {};
+json.SPUSBDataType[2]._items[0]._name = "ErgoDone";
+json.SPUSBDataType[2]._items[0].bcd_device = "0.01";
+json.SPUSBDataType[2]._items[0].bus_power = "500";
+json.SPUSBDataType[2]._items[0].bus_power_used = "500";
+json.SPUSBDataType[2]._items[0].device_speed = "full_speed";
+json.SPUSBDataType[2]._items[0].extra_current_used = "0";
+json.SPUSBDataType[2]._items[0].location_id = "0x14200000 / 20";
+json.SPUSBDataType[2]._items[0].manufacturer = "K.T.E.C.";
+json.SPUSBDataType[2]._items[0].product_id = "0xe60d";
+json.SPUSBDataType[2]._items[0].serial_num = "0";
+json.SPUSBDataType[2]._items[0].vendor_id = "0xfeed";
+#+END_SRC
+
+
+OSX isn't offering to use it as a keyboard though?
+
+** Linux
+*** lsusb
+#+BEGIN_SRC shell
+$ lsusb
+Bus 002 Device 007: ID 17f6:0802 Unicomp, Inc
+Bus 002 Device 005: ID 0d8c:0012 C-Media Electronics, Inc.
+Bus 002 Device 009: ID feed:e60d
+Bus 002 Device 003: ID 0b05:181b ASUSTek Computer, Inc.
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+#+end_src
+
+*** dmesg
+
+#+BEGIN_SRC shell
+$ dmesg
+[  347.302869] usb 2-1.2: new full-speed USB device number 9 using ehci-pci
+[  347.382858] usb 2-1.2: New USB device found, idVendor=feed, idProduct=e60d, bcdDevice= 0.01
+[  347.382862] usb 2-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[  347.382864] usb 2-1.2: Product: ErgoDone
+[  347.382866] usb 2-1.2: Manufacturer: K.T.E.C.
+[  347.382867] usb 2-1.2: SerialNumber: 0
+[  347.387456] input: K.T.E.C. ErgoDone as /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2:1.0/0003:FEED:E60D.0009/input/input30
+[  347.439338] hid-generic 0003:FEED:E60D.0009: input,hidraw2: USB HID v1.11 Keyboard [K.T.E.C. ErgoDone] on usb-0000:00:1d.0-1.2/input0
+[  347.441204] input: K.T.E.C. ErgoDone Mouse as /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2:1.1/0003:FEED:E60D.000A/input/input31
+[  347.441503] input: K.T.E.C. ErgoDone System Control as /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2:1.1/0003:FEED:E60D.000A/input/input32
+[  347.493105] input: K.T.E.C. ErgoDone Consumer Control as /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2:1.1/0003:FEED:E60D.000A/input/input33
+[  347.493295] input: K.T.E.C. ErgoDone Keyboard as /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.2/2-1.2:1.1/0003:FEED:E60D.000A/input/input34
+[  347.493652] hid-generic 0003:FEED:E60D.000A: input,hidraw3: USB HID v1.11 Mouse [K.T.E.C. ErgoDone] on usb-0000:00:1d.0-1.2/input1
+#+END_SRC
+
+
+
+But it's not obviously generating keyboard events:
+
+
+Note: OSX sees it better if you edit the vendor_id/device_id back to
+the correct codes:  http://pid.codes/1209/2328/
+
+
+
+* Conclusion
+
+Stupid one this.  When I was debugging the keyswitches, I only had the
+mainboard plugged in, not the extender.  When testing the full
+firmware I plugged the extender into the mainboard.
+
+After one iteration of moving from Linux to OSX I left the extender in
+the other room, and so just plugged in the mainboard with the stock
+qmk firmware into the OSX machine and it worked. On plugging in the
+extender it stopped working again.
+
+I was a little concerned that this meant I'd have to debug the
+extender, but then I remembered to check the cable - swapped the cable
+from the ergodox-ez with the erogodone and the ergodone springs into
+life!
+
+Weirdly the cable I was using with the ergodone works with the
+ergodox-ez, so I don't even need to get a new link cable.
+
+My hunch is cable A doesn't fit flush with the ergodone so it causes
+it to flake out.
+
+
+* Autotangle
+
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
+# End:
