@@ -18,7 +18,7 @@ folder for any bit of investigation I'm doing.  In that you keep an
 org-mode file with notes and various bits of code you're trying, the
 code can be tangled (extracted) into files to run or the results could
 be captured directly back in the notes file.  For example -
-[[https://github.com/richardc/blog/tree/master/content/blog/2020/04/debugging-ergodone.org][debugging-ergodone.org]] is a file I captured as I was debugging my
+[[https://github.com/richardc/blog/blob/master/content/blog/2020/04/hugo-org-oh-my/debugging-ergodone.org][debugging-ergodone.org]] is a file I captured as I was debugging my
 keyboard, think of it as a bonus post if you like.
 
 Many other blog posts exist explain how org-mode is a
