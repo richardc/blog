@@ -14,7 +14,7 @@ path = "codeberg.org/yelosan/hugo-feeds"
 disable = false
 ignoreConfig = false
 ignoreImports = false
-path = 'github.com/gohugo-ananke/ananke/v2'
+path = "github.com/mansoorbarri/roadster"
 
 
 [caches]
