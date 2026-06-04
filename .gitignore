@@ -8,4 +8,4 @@ Thumbs.db
 .rbenv-version
 .rvmrc
 
-.hugo-build.lock
+.hugo_build.lock
