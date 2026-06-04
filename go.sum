@@ -1,4 +1,4 @@
-codeberg.org/yelosan/hugo-feeds v0.0.0-20240620220418-fbb590066925 h1:EhI/s4tDLQp2bDEKMRxJywxks2pUMGqpX/LFwqQtxNQ=
-codeberg.org/yelosan/hugo-feeds v0.0.0-20240620220418-fbb590066925/go.mod h1:m8ZR92RLEfDsNu7jEDT9Se98vvlT/d8hTp67t+u6mp4=
+github.com/186526/hugo-atom-feed v0.0.0-20260322164544-e2acacc5459a h1:0mK3VGcLZa29AWVNiAh0zVs0A61N8d0tO06wtHVI5IM=
+github.com/186526/hugo-atom-feed v0.0.0-20260322164544-e2acacc5459a/go.mod h1:sL/DooJaZcEmKP0f85O2Bx7dND2w968Mg53mGAJwwdk=
 github.com/mansoorbarri/roadster v0.0.0-20260330013217-cf57f17ee5a5 h1:gReHjjOQUOPMQ/MA9w7JKMvmyflPy/0QtF0QnFaKiFc=
 github.com/mansoorbarri/roadster v0.0.0-20260330013217-cf57f17ee5a5/go.mod h1:2/Ki+3FPASfP+1RQIkNZrSBipBi8ZW9cuyeXGnMtakk=

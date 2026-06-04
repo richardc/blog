@@ -8,7 +8,7 @@ enableRobotsTXT = true
 
 [module]
 [[module.imports]]
-path = "codeberg.org/yelosan/hugo-feeds"
+path = "github.com/186526/hugo-atom-feed"
 
 [[module.imports]]
 disable = false
